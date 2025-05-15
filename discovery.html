@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painted Signal Discovery</title>
+  <link rel="icon" href="32.ico" type="image/x-icon" />
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #fafafa;
+      margin: 2rem;
+      color: #222;
+    }
+    h1 {
+      color: #333;
+    }
+    .channel {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .channel img {
+      width: 48px;
+      height: 48px;
+      margin-right: 1rem;
+    }
+    .channel-name {
+      flex-grow: 1;
+      font-size: 1.2rem;
+    }
+    .channel button {
+      background: #3366ff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .channel button:hover {
+      background: #254edb;
+    }
+  </style>
+</head>
+<body>
+  <h1>Painted Signal Discovery</h1>
+  <p>Select a channel below to start watching:</p>
+
+  <!-- Channel List -->
+  <div class="channel">
+    <img src="https://gioye.github.io/paintedsignal/sample-channel-icon.png" alt="GioyeTV">
+    <div class="channel-name">GioyeTV</div>
+    <button onclick="watchChannel('https://gioye.github.io/paintedsignal/channels/gioyetv.json')">Watch</button>
+  </div>
+
+  <div class="channel">
+    <img src="https://gioye.github.io/paintedsignal/sample2-icon.png" alt="RetroTube">
+    <div class="channel-name">RetroTube</div>
+    <button onclick="watchChannel('https://gioye.github.io/paintedsignal/channels/retrotube.json')">Watch</button>
+  </div>
+
+  <div class="channel">
+    <img src="https://gioye.github.io/paintedsignal/sample3-icon.png" alt="NewsNet 24">
+    <div class="channel-name">NewsNet 24</div>
+    <button onclick="watchChannel('https://gioye.github.io/paintedsignal/channels/newsnet24.json')">Watch</button>
+  </div>
+
+  <script>
+    function watchChannel(url) {
+      window.location.href = `https://gioye.github.io/paintedsignal/watch/?url=${encodeURIComponent(url)}`;
+    }
+  </script>
+</body>
+</html>
