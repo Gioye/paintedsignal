@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painted Signal TV</title>
+  <link rel="icon" href="32.ico" type="image/x-icon" />
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+      background-color: #f4f4f4;
+      color: #222;
+    }
+    h1 {
+      color: #333;
+    }
+    button, input[type="text"] {
+      padding: 0.6rem 1rem;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #3366ff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #254edb;
+    }
+    .url-input {
+      display: none;
+      margin-top: 1rem;
+    }
+    .doc-section {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Painted Signal</h1>
+  <p>Open Source IPTV Player for custom "Painted Signal JSON Files".</p>
+
+  <button onclick="location.href='discovery.html'">WATCH VIA DISCOVERY</button>
+  <br>
+  <button onclick="document.querySelector('.url-input').style.display = 'block'">WATCH VIA URL</button>
+
+  <div class="url-input">
+    <input type="text" id="urlBox" placeholder="Enter Painted Signal JSON URL">
+    <button onclick="redirectToURL()">Go</button>
+  </div>
+
+  <div class="doc-section">
+    <h2>Painted Signal JSON Structure</h2>
+    <p>The JSON format for Painted Signal channels contains the following fields:</p>
+    <ul>
+      <li><code>icon</code>: URL to the channel icon. Can be PNG, ICO, HTTP, or base64.</li>
+      <li><code>name</code>: Name of the channel.</li>
+      <li><code>id</code>: Numeric channel ID, used by Painted Signal Discovery.</li>
+      <li><code>bumper</code>: Media file that plays at the start and end of broadcasts.</li>
+      <li><code>medialist</code>: Array of media files to play for the channel.</li>
+    </ul>
+
+    <h3>Example</h3>
+    <pre><code>{
+  "icon": "https://example.com/icon.png",
+  "name": "Sample Channel",
+  "id": 1,
+  "bumper": "https://example.com/bumper.mp4",
+  "medialist": [
+    "https://example.com/media1.mp4",
+    "https://example.com/media2.mp4"
+  ]
+}</code></pre>
+  </div>
+
+  <script>
+    function redirectToURL() {
+      const url = document.getElementById('urlBox').value.trim();
+      if (url) {
+        window.location.href = `https://gioye.github.io/paintedsignal/watch/?url=${encodeURIComponent(url)}`;
+      } else {
+        alert('Please enter a valid URL.');
+      }
+    }
+  </script>
+</body>
+</html>
