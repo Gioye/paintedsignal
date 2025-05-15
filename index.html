@@ -89,7 +89,7 @@
     function redirectToURL() {
       const url = document.getElementById('urlBox').value.trim();
       if (url) {
-        window.location.href = `https://gioye.github.io/paintedsignal/watch/?url=${encodeURIComponent(url)}`;
+        window.location.href = `https://gioye.github.io/paintedsignal/watch?url=${encodeURIComponent(url)}`;
       } else {
         alert('Please enter a valid URL.');
       }
