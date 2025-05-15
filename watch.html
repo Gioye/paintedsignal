@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Painted Signal Watch</title>
+  <link rel="icon" href="32.ico" type="image/x-icon" />
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+      font-family: sans-serif;
+    }
+    video {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      background: black;
+    }
+    #channelName {
+      margin: 0.5rem;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="channelName">Loading...</div>
+  <video id="player" controls autoplay></video>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const jsonUrl = params.get("url");
+    const raw = params.get("raw");
+    const blob = params.get("blob") === "true";
+    const video = document.getElementById("player");
+    const channelName = document.getElementById("channelName");
+
+    async function loadJSON() {
+      const res = await fetch(jsonUrl);
+      return res.json();
+    }
+
+    function getRandomMedia(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    async function handleRawMode() {
+      try {
+        const data = await loadJSON();
+        if (raw === "bumper") {
+          window.location.href = data.bumper;
+        } else if (raw === "true") {
+          const media = getRandomMedia(data.medialist || []);
+          if (!media) throw new Error("No media found.");
+          if (blob) {
+            const res = await fetch(media);
+            const blobData = await res.blob();
+            const blobUrl = URL.createObjectURL(blobData);
+            window.location.href = blobUrl;
+          } else {
+            window.location.href = media;
+          }
+        }
+      } catch (e) {
+        alert("Error loading or redirecting: " + e.message);
+      }
+    }
+
+    // Standard player logic
+    let state = "bumperStart";
+    let channelData = null;
+
+    async function startPlayer() {
+      try {
+        const res = await fetch(jsonUrl);
+        channelData = await res.json();
+        channelName.textContent = channelData.name || "Unknown Channel";
+        playNext();
+      } catch (e) {
+        channelName.textContent = "Failed to load channel.";
+        console.error(e);
+      }
+    }
+
+    function playNext() {
+      if (!channelData) return;
+
+      let nextSrc;
+
+      if (state === "bumperStart") {
+        nextSrc = channelData.bumper;
+        state = "media";
+      } else if (state === "media") {
+        const list = channelData.medialist;
+        if (!list || list.length === 0) {
+          channelName.textContent = "No media available.";
+          return;
+        }
+        nextSrc = getRandomMedia(list);
+        state = "bumperEnd";
+      } else if (state === "bumperEnd") {
+        nextSrc = channelData.bumper;
+        state = "bumperStart";
+      }
+
+      if (nextSrc) {
+        video.src = nextSrc;
+        video.play().catch(console.error);
+      }
+    }
+
+    video.addEventListener("ended", playNext);
+
+    // Decide behavior
+    if (raw) {
+      handleRawMode();
+    } else {
+      startPlayer();
+    }
+  </script>
+</body>
+</html>
